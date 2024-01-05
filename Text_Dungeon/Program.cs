@@ -2,6 +2,7 @@
 using System.Numerics;
 using System.Reflection.Metadata;
 using System.Xml;
+using System.IO;
 
 namespace Text_Dungeon
 {
@@ -101,6 +102,7 @@ namespace Text_Dungeon
     {
         static Player player = new Player();
         static Equipment[] equipments = new Equipment[7];
+        static string filePath = Directory.GetCurrentDirectory();
 
         static void Main(string[] args)
         {
@@ -161,6 +163,7 @@ namespace Text_Dungeon
             // 플레이어가 종료 0 을 선택할 때까지 무한 루프 돌기
             while (true)
             {
+                clearConsole();
                 Console.ForegroundColor = ConsoleColor.Yellow;
                 Console.WriteLine("\n스파르타 마을에 오신 여러분 환영합니다.");
                 Console.WriteLine("이곳에서 던전으로 들어가기전 활동을 할 수 있습니다.\n");
@@ -188,7 +191,7 @@ namespace Text_Dungeon
                 if (behavior == 0) return;      // 게임 종료
                 else if (behavior == 1)
                 {
-                    // 플레이어 상태 보기
+                    // 플레이어 상태 보기              
                     ShowMyStats();
                 }
                 else if (behavior == 2)
@@ -208,6 +211,7 @@ namespace Text_Dungeon
                 else
                 {
                     // 휴식 하기
+                    clearConsole();
                     GotoInn();
                 }
             }
@@ -216,6 +220,7 @@ namespace Text_Dungeon
         // 플레이어 상태 보기
         static public void ShowMyStats()
         {
+            clearConsole();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("\n상태 보기");
             Console.ResetColor();
@@ -237,6 +242,7 @@ namespace Text_Dungeon
         {
             while (true)
             {
+                clearConsole();
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("\n인벤토리");
 
@@ -285,6 +291,7 @@ namespace Text_Dungeon
         {
             while (true)
             {
+                clearConsole();
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
                 Console.WriteLine("\n인벤토리 - 장착 관리");
                 Console.ResetColor();
@@ -403,6 +410,7 @@ namespace Text_Dungeon
         {
             while (true)
             {
+                clearConsole();
                 // 상점 불러오기
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("\n상점");
@@ -452,6 +460,7 @@ namespace Text_Dungeon
         {
             while (true)
             {
+                clearConsole();
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("\n상점 - 아이템 구매");
                 Console.ResetColor();
@@ -521,6 +530,7 @@ namespace Text_Dungeon
         {
             while (true)
             {
+                clearConsole();
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.WriteLine("\n상점 - 아이템 판매");
                 Console.ResetColor();
@@ -598,7 +608,7 @@ namespace Text_Dungeon
         static public void EntertheDungeon()
         {
             // 던전 입장
-
+            clearConsole();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.WriteLine("던전 입장");
             Console.ResetColor();
@@ -664,6 +674,7 @@ namespace Text_Dungeon
         // 던전 입장 결과
         static public void DungeonResult(string dungeonName, int clearGold, int recommendedDef)
         {
+            clearConsole();
             Random random = new Random();
 
             bool result = true;
@@ -732,6 +743,7 @@ namespace Text_Dungeon
         // 휴식하기
         static public void GotoInn()
         {
+            clearConsole();
             Console.WriteLine("휴식하기");
             Console.WriteLine($"500 G 를 내면 체력을 회복할 수 있습니다. (보유 골드 : {player.gold} G)\n");
 
@@ -769,7 +781,7 @@ namespace Text_Dungeon
         static public void GetEquipmentXml()
         {
             XmlDocument xdoc = new XmlDocument();
-            xdoc.Load(".\\Equipment.xml");      // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
+            xdoc.Load(filePath +"\\Equipment.xml");      // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
 
             XmlNodeList nodes = xdoc.SelectNodes("/Item/Equipment");    // foreach문을 돌릴 노드 선택하기
 
@@ -793,7 +805,7 @@ namespace Text_Dungeon
         static public void GetPlayerXml()
         {
             XmlDocument xdoc = new XmlDocument();
-            xdoc.Load(".\\Player.xml");     // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
+            xdoc.Load(filePath + "\\Player.xml");     // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
 
             XmlNodeList nodes = xdoc.GetElementsByTagName("Player");    // foreach문 돌릴 노드 선택
 
@@ -818,7 +830,7 @@ namespace Text_Dungeon
         static public void SetPlayerXml()
         {
             XmlDocument xdoc = new XmlDocument();
-            xdoc.Load(".\\Player.xml");     // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
+            xdoc.Load(filePath + "\\Player.xml");     // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
 
             XmlNodeList nodes = xdoc.GetElementsByTagName("Player");
 
@@ -836,14 +848,14 @@ namespace Text_Dungeon
                 e.SelectSingleNode("dungeonClearCounter").InnerText = player.dungeonClearCounter.ToString();
             }
 
-            xdoc.Save(".\\Player.xml");     // 플레이어 xml 파일 저장
+            xdoc.Save(filePath + "\\Player.xml");     // 플레이어 xml 파일 저장
         }
 
         // 장비 xml 파일 저장하기
         static public void SetEquipmentXml()
         {
             XmlDocument xdoc = new XmlDocument();
-            xdoc.Load(".\\Equipment.xml");      // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
+            xdoc.Load(filePath + "\\Equipment.xml");      // Text_Dungeon.exe 기준 xml의 상대 경로. exe파일과 같은 위치에 xml 파일이 있을 경우 읽을 수 있다.
 
             XmlNodeList nodes = xdoc.SelectNodes("/Item/Equipment");
 
@@ -861,7 +873,12 @@ namespace Text_Dungeon
                 i++;
             }
 
-            xdoc.Save(".\\Equipment.xml");      // 장비 xml 파일 저장
+            xdoc.Save(filePath + "\\Equipment.xml");      // 장비 xml 파일 저장
+        }
+
+        static public void clearConsole()
+        {
+            Console.Clear();
         }
 
         // 플레이어 행동 값을 입력 받을 때, 유효 범위 밖을 입력할 경우 에러 메시지 출력하기
