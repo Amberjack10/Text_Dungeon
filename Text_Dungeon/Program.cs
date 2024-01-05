@@ -106,6 +106,7 @@ namespace Text_Dungeon
 
         static void Main(string[] args)
         {
+            filePath = filePath.Replace("\\bin\\Debug\\net8.0", "");
             // 저장되어 있는 플레이어, 장비 xml 파일 읽기
             GetPlayerXml();
             GetEquipmentXml();
