@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Player>
+  <name>Chad</name>
+  <level>1</level>
+  <playerClass>전사</playerClass>
+  <baseAtk>10</baseAtk>
+  <baseDef>5</baseDef>
+  <Atk>0</Atk>
+  <Def>0</Def>
+  <Hp>100</Hp>
+  <gold>1500</gold>
+  <isWeaponEquipped>False</isWeaponEquipped>
+  <isArmorEquipped>False</isArmorEquipped>
+  <dungeonClearCounter>0</dungeonClearCounter>
+</Player>
