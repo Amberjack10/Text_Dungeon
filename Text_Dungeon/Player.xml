@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Player>
   <name>Chad</name>
-  <level>1</level>
+  <level>3</level>
   <playerClass>전사</playerClass>
-  <baseAtk>10</baseAtk>
-  <baseDef>5</baseDef>
+  <baseAtk>11</baseAtk>
+  <baseDef>7</baseDef>
   <Atk>0</Atk>
-  <Def>0</Def>
+  <Def>15</Def>
   <Hp>100</Hp>
-  <gold>1500</gold>
+  <gold>6287</gold>
   <isWeaponEquipped>False</isWeaponEquipped>
-  <isArmorEquipped>False</isArmorEquipped>
-  <dungeonClearCounter>0</dungeonClearCounter>
+  <isArmorEquipped>True</isArmorEquipped>
+  <dungeonClearCounter>1</dungeonClearCounter>
 </Player>

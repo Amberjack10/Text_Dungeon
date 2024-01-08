@@ -120,7 +120,7 @@ namespace Text_Dungeon
         }
 
         // 플레이어의 행동 입력 받기
-        static int getBehavior()
+        static int getBehavior(int min, int max)
         {
             int behavior;
             bool isNumeric;
@@ -134,17 +134,8 @@ namespace Text_Dungeon
                 try
                 {
                     isNumeric = int.TryParse(Console.ReadLine(), out behavior);     // 입력 받은 값이 정수형 int 값인지 확인해서 맞을 경우 Parse 시켜주기
-                    if (!isNumeric) { throw new CheckInputException("잘못된 입력입니다.\n"); }  // 아닐 경우 에러 메시지 출력
-
-                    // 플레이어가 유효 범위의 행동 값 입력 시 while문 종료하고 행동 값 반환
-                    if (behavior >= 0 && behavior <= equipments.Length)
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        throw new CheckInputException("잘못된 입력입니다.\n");
-                    }
+                    if (!isNumeric || CheckValidInput(behavior, min, max) == false) { throw new CheckInputException("잘못된 입력입니다.\n"); }  // 아닐 경우 에러 메시지 출력
+                    else break;
                 }
                 catch (CheckInputException ex)
                 {
@@ -155,6 +146,12 @@ namespace Text_Dungeon
             }
 
             return behavior;
+        }
+
+        private static bool CheckValidInput(int behavior, int min, int max)
+        {
+            if(behavior >= min && behavior <= max) { return true; }
+            return false;
         }
 
 
@@ -179,42 +176,26 @@ namespace Text_Dungeon
                 Console.WriteLine("0. 종료");
 
                 // 플레이어의 행동 값 받기
-                int behavior = getBehavior();
-
-                while (!(behavior >= 0 && behavior <= 5))
+                switch (getBehavior(0, 5))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Console.ResetColor();
-                    behavior = getBehavior();
-                }
-
-                if (behavior == 0) return;      // 게임 종료
-                else if (behavior == 1)
-                {
-                    // 플레이어 상태 보기              
-                    ShowMyStats();
-                }
-                else if (behavior == 2)
-                {
-                    // 인벤토리
-                    ShowMyInventory();
-                }else if (behavior == 3)
-                {
-                    // 상점 열기
-                    ShowShop();
-                }
-                else if(behavior == 4)
-                {
-                    // 던전 입장
-                    EntertheDungeon();
-                }
-                else
-                {
-                    // 휴식 하기
-                    clearConsole();
-                    GotoInn();
-                }
+                    case 1:
+                        ShowMyStats();
+                        break;
+                    case 2:
+                        ShowMyInventory();
+                        break;
+                    case 3:
+                        ShowShop();
+                        break;
+                    case 4:
+                        EntertheDungeon();
+                        break;
+                    case 5:
+                        GotoInn();
+                        break;
+                    default:
+                        return;
+                }               
             }
         }
 
@@ -230,7 +211,7 @@ namespace Text_Dungeon
             Console.WriteLine("0. 나가기");
 
             // 사용자가 0을 누르면 함수 종료, StartVillage()로 돌아가기
-            while (getBehavior() != 0)
+            while (getBehavior(0, 0) != 0)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.WriteLine("잘못된 입력입니다.");
@@ -265,24 +246,13 @@ namespace Text_Dungeon
                 Console.WriteLine("\n1. 장착 관리");
                 Console.WriteLine("0. 나가기");
 
-                int behavior = getBehavior();
-
-                if (behavior == 0) break;
-
-                while (!(behavior == 1))
+                switch (getBehavior(0, 1))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Console.ResetColor();
-
-                    behavior = getBehavior();
-                }
-
-                // 사용자가 장착 관리 선택 시
-                if (behavior == 1)
-                {
-                    // 장착 관리
-                    EquipManagement();
+                    case 0:
+                        return;
+                    case 1:
+                        EquipManagement();
+                        break;
                 }
             }
         }
@@ -316,22 +286,10 @@ namespace Text_Dungeon
                 }
 
 
-
                 Console.WriteLine("\n0. 나가기");
 
-                //Console.WriteLine("원하시는 행동을 입력해주세요.");
-                //Console.Write(">> ");
 
-                int behavior = getBehavior();
-
-                while (!(behavior >= 0 && behavior <= j))
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Console.ResetColor();
-
-                    behavior = getBehavior();
-                }
+                int behavior = getBehavior(0, j);
 
                 if (behavior == 0) break;      // 장착 관리 종료
 
@@ -434,25 +392,16 @@ namespace Text_Dungeon
                 Console.WriteLine("2. 아이템 판매");
                 Console.WriteLine("0. 나가기");
 
-                int behavior = getBehavior();
-
-                while (!(behavior == 0 || behavior == 1 || behavior == 2))
+                switch (getBehavior(0, 2))
                 {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Console.ResetColor();
-                    behavior = getBehavior();
+                    case 1:
+                        BuyEquipment();
+                        break;
+                    case 2:
+                        SellEquipment();
+                        break;
+                    default: return;
                 }
-
-                if (behavior == 0)
-                {
-                    break;
-                }
-                else if(behavior == 1)
-                {
-                    BuyEquipment();     // 아이템 구매
-                }else
-                    SellEquipment();    // 아이템 판매
             }
         }
 
@@ -485,7 +434,7 @@ namespace Text_Dungeon
 
                 int behavior;               
 
-                behavior = getBehavior();
+                behavior = getBehavior(0, i);
 
                 if(behavior == 0) { break; }
 
@@ -562,7 +511,7 @@ namespace Text_Dungeon
 
                 while (true)
                 {
-                    behavior = getBehavior();
+                    behavior = getBehavior(0, i);
 
                     if (behavior >= 0 && behavior <= j)
                     {
@@ -621,20 +570,10 @@ namespace Text_Dungeon
             Console.WriteLine("3. 어려운 던전     | 방어력 17 이상 권장");
             Console.WriteLine("0. 나가기");
 
+
             int behavior;
 
-            while (true)
-            {
-                behavior = getBehavior();
-
-                if (!(behavior >= 0 && behavior <= 3))
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.WriteLine("잘못된 입력입니다.");
-                    Console.ResetColor();
-                }
-                else break;
-            }
+            behavior = getBehavior(0, 3);
 
             if (behavior != 0)
             {
@@ -726,15 +665,7 @@ namespace Text_Dungeon
 
             Console.WriteLine("0. 나가기");
 
-            behavior = getBehavior();
-
-            while (behavior != 0)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("잘못된 입력입니다.");
-                Console.ResetColor();
-                behavior = getBehavior();
-            }
+            behavior = getBehavior(0, 0);
 
             // 플레이어가 잃은 체력과 얻은 골드 반영하기
             player.Hp -= loseHp;
@@ -751,15 +682,7 @@ namespace Text_Dungeon
             Console.WriteLine("1. 휴식하기");
             Console.WriteLine("0. 나가기");
 
-            int behavior = getBehavior();
-
-            while (!(behavior == 0 || behavior == 1))
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.WriteLine("잘못된 입력입니다.");
-                Console.ResetColor();
-                behavior = getBehavior();
-            }
+            int behavior = getBehavior(0, 1);
 
             if (behavior == 1 && player.gold >= 500)
             {

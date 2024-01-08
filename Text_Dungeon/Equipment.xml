@@ -24,8 +24,8 @@
     <stats>15</stats>
     <canon>스파르타의 전사들이 사용했다는 전설의 갑옷입니다.</canon>
     <price>2100</price>
-    <IsOutOfStock>False</IsOutOfStock>
-    <IsEquipped>False</IsEquipped>
+    <IsOutOfStock>True</IsOutOfStock>
+    <IsEquipped>True</IsEquipped>
   </Equipment>
   <Equipment>
     <name>낡은 검</name>
